@@ -12,10 +12,10 @@ app.appendChild(banner);
 
 /// Sets Main Menu and Default Section
 request.onload = function() {
-  //JSON response parse
-  var data = JSON.parse(this.response);
   //GET on SUCCESS
   if(this.readyState == 4 && this.status == 200) {
+    //JSON response parse
+    var data = JSON.parse(this.response);
     // OK status banner render
     banner.textContent = "Star Wars Data";
     //JSON data handling
@@ -50,9 +50,9 @@ function renderDefault(){
   const defaultRender = new XMLHttpRequest();
   defaultRender.open('GET', defaultSection, true);
   defaultRender.onload = function() {
-    var data = JSON.parse(this.response);
     //GET on SUCCESS
     if(this.readyState == 4 && this.status == 200) {
+      var data = JSON.parse(this.response);
       //Change if default changes
       renderFilms(data);
     //ON ERROR
@@ -79,10 +79,10 @@ function callerEvent(e){
   var origin = uri[uri.length - 2];
 
   request.onload = function() {
-    //JSON response parse
-    var data = JSON.parse(this.response);
     //GET on SUCCESS
     if(this.readyState == 4 && this.status == 200) {
+      //JSON response parse
+      var data = JSON.parse(this.response);
       //'Router' to each section JSON response
       switch (origin) {
         case 'people':
@@ -156,6 +156,21 @@ function renderPeople(data) {
     card.setAttribute('class', 'card');
     //Datasets
     card.dataset.name = data.results[people].name;
+    card.dataset.height = data.results[people].height;
+    card.dataset.eyeColor = data.results[people].eye_color;
+    card.dataset.hairColor = data.results[people].hair_color;
+    card.dataset.gender = data.results[people].gender;
+    card.dataset.dob = data.results[people].birth_year;
+
+    //Species JSON Workaround
+    var species = data.results[people].species[0].split('/');
+    var speciesCode = species[species.length - 2];
+    if(speciesCode == 1){
+      card.dataset.species = 'Human';
+    } else if(speciesCode == 2){
+      card.dataset.species = 'Droid';
+    }
+    
     //OnLoad Content set
     //Name content
     var name = document.createElement('h3');
