@@ -69,15 +69,31 @@ function renderDefault(){
 //Handles Section API Calls
 function callerEvent(e){
   e.preventDefault();
+  // Clears previous Home content
+  clearHome();
+  //Creates 'section' XMLHttp Request
   var data = new XMLHttpRequest();
   request.open('GET', this.href, true);
+  //Stores origin of JSON data to 'route' correct info to render
+  var uri = this.href.split('/');
+  var origin = uri[uri.length - 2];
+
   request.onload = function() {
     //JSON response parse
     var data = JSON.parse(this.response);
     //GET on SUCCESS
     if(this.readyState == 4 && this.status == 200) {
-      //JSON data handling
-      console.log(data);
+      //'Router' to each section JSON response
+      switch (origin) {
+        case 'people':
+          renderPeople(data);
+          break;
+        case 'films':
+          renderFilms(data);
+          break;
+        default:
+          renderPlaceholder(origin);
+      }
     //ON ERROR
     } else if(request.status >= 400) {
         console.log('El recurso no existe o no se encuentra disponible.');
@@ -127,7 +143,46 @@ function renderFilms(data) {
   }
 }
 
+function renderPeople(data) {
+  /*
+    Renders content for 'People' Section;
+    Data is stored in data-sets to enable use across functions
+    without requiring aditional API calls nor scope errors.
+    Since none of the data is sensitive, all is forward-facing.
+  */
+  for(var people in data.results){
+    //Creates each individual card
+    var card = document.createElement('div');
+    card.setAttribute('class', 'card');
+    //Datasets
+    card.dataset.name = data.results[people].name;
+    //OnLoad Content set
+    //Name content
+    var name = document.createElement('h3');
+    name.textContent = card.dataset.name;
+    //Render
+    card.appendChild(name);
+    //Click Event Handler
+    card.onclick = infoEvent;
+    home.appendChild(card);
+  }
+}
+
+//Placeholder renderer //
+function renderPlaceholder(origin) {
+  var placeHolder = document.createElement('h2');
+  placeHolder.textContent = 'Very soon you will see the data of ' + origin;
+  home.appendChild(placeHolder);
+}
+
 //Section Extra Info Switcher
 function infoEvent(){
   console.log("Click!");
+}
+
+//Clears Home node children
+function clearHome() {
+  while(home.firstChild){
+    home.removeChild(home.firstChild);
+  }
 }
