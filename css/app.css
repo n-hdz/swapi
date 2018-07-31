@@ -1,0 +1,76 @@
+body{
+  padding: 2em 3em;
+}
+
+h1 {
+  font-family: "Roboto", sans-serif;
+  font-weight: 800;
+}
+
+.banner {
+  padding: 2em;
+  height: 33%;
+  min-width: 450px;
+  max-width: 860px;
+  background-color: #DDDDDD;
+  margin: 0 auto 2em auto;
+}
+
+.banner > h1 {
+  text-align: center;
+}
+.banner > .menu {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.menu > a {
+  text-decoration: none;
+  color: #000000;
+  font-family: "OpenSans", sans-serif;
+}
+
+.menu > a:hover {
+  text-decoration: underline;
+  color: yellow;
+}
+
+.home {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  width: 95%;
+  margin: 0 auto;
+  max-width: 860px;
+}
+.home > .card {
+  width: 200px;
+  min-width: 200px;
+  height: 200px;
+  min-height: 200px;
+  background-color: #DDDDDD;
+  padding: 0.5em 1em;
+  margin-bottom: 1em;
+}
+
+.home > .card:hover {
+  cursor: pointer;
+  background-color: #BBBBBB;
+}
+
+.card > h3 {
+  font-family: "Roboto", sans-serif;
+  margin: 0px;
+  margin-bottom: 0.5em;
+}
+.card > h4 {
+  font-family: "Roboto", sans-serif;
+  margin: 0px;
+}
+
+.card > p {
+  font-family: "OpenSans", sans-serif;
+  font-style: italic;
+}

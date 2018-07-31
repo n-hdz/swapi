@@ -1,14 +1,17 @@
 //Creates home XMLHttp Request
 var request = new XMLHttpRequest();
 const app = document.getElementById('root');
-const banner = document.createElement('h1');
+const banner = document.createElement('div');
+banner.setAttribute('class', 'banner');
+const message = document.createElement('h1');
 const home = document.createElement('div');
+home.setAttribute('class', 'home');
 // Set Default Section
 const defaultSection = 'https://swapi.co/api/films/';
 
 //GET new connection
 request.open('GET', 'https://swapi.co/api/', true);
-app.appendChild(banner);
+banner.appendChild(message);
 
 /// Sets Main Menu and Default Section
 request.onload = function() {
@@ -17,7 +20,7 @@ request.onload = function() {
     //JSON response parse
     var data = JSON.parse(this.response);
     // OK status banner render
-    banner.textContent = "Star Wars Data";
+    message.textContent = "Star Wars Data";
     //JSON data handling
 
     // Main navigation Menu Render
@@ -31,18 +34,19 @@ request.onload = function() {
       link.onclick = callerEvent;
       mainMenu.appendChild(link);
     }
-    app.appendChild(mainMenu);
+    banner.appendChild(mainMenu);
     // Render Default Section
     renderDefault();
   //ON ERROR
   } else if(request.status >= 400) {
       // Error status banner render
-      banner.textContent = "This is not the page you are looking for!(404)";
+      message.textContent = "This is not the page you are looking for!(404)";
       console.log('El recurso no existe o no se encuentra disponible.');
     }
 }
  //// On Home load ////
 request.send();
+app.appendChild(banner);
 
 //Renders onLoad first Section; Can be configured to any section
 function renderDefault(){
@@ -170,7 +174,7 @@ function renderPeople(data) {
     } else if(speciesCode == 2){
       card.dataset.species = 'Droid';
     }
-    
+
     //OnLoad Content set
     //Name content
     var name = document.createElement('h3');
