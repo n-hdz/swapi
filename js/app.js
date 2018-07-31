@@ -6,6 +6,7 @@ banner.setAttribute('class', 'banner');
 const message = document.createElement('h1');
 const home = document.createElement('div');
 home.setAttribute('class', 'home');
+home.setAttribute('id', 'canvas');
 // Set Default Section
 const defaultSection = 'https://swapi.co/api/films/';
 
@@ -119,6 +120,7 @@ function renderFilms(data) {
     //Creates each individual card
     var card = document.createElement('div');
     card.setAttribute('class', 'card');
+    card.setAttribute('id', data.results[film].episode_id);
     //Datasets
     card.dataset.title = data.results[film].title;
     card.dataset.episode = data.results[film].episode_id;
@@ -196,7 +198,65 @@ function renderPlaceholder(origin) {
 
 //Section Extra Info Switcher
 function infoEvent(){
-  console.log("Click!");
+  event.preventDefault();
+  var cards = document.getElementsByClassName('card');
+  for(var i = 0; i < cards.length; i++){
+    if(cards[i].id != this.id) {
+      cards[i].classList.add('hidden');
+    } else {
+      var target = cards[i];
+      cards[i].classList.add('hidden');
+    }
+  }
+  renderSelected(target, target.id);
+}
+
+//Renders extra data within selected div
+function renderSelected(card, id){
+  var bigCard = document.createElement('div');
+  bigCard.setAttribute('class', 'big');
+  if(card.hasAttribute('data-title')){
+    //Render Big Film
+    //Title content
+    var title = document.createElement('h3');
+    title.textContent = card.dataset.title;
+    //Film Id Content
+    var filmId = document.createElement('h4');
+    filmId.textContent = card.dataset.episode;
+    //Director
+    var director = document.createElement('h4');
+    director.textContent = card.dataset.director;
+    //Producer
+    var producer = document.createElement('h4');
+    producer.textContent = card.dataset.producer;
+    //Relase Date Info
+    var dateOfRelease = document.createElement('p');
+    dateOfRelease.setAttribute('class', 'italic');
+    dateOfRelease.textContent = card.dataset.releaseDate;
+    //Close button
+    var close = document.createElement('button');
+    close.textContent = 'X';
+    close.setAttribute('class', 'btn-close')
+    close.onclick = closeCard;
+    //Render
+    bigCard.appendChild(title);
+    bigCard.appendChild(close);
+    bigCard.appendChild(filmId);
+    bigCard.appendChild(director);
+    bigCard.appendChild(producer);
+    bigCard.appendChild(dateOfRelease);
+  }
+  home.appendChild(bigCard);
+}
+
+//Clears big card
+function closeCard() {
+  var bigCard = document.getElementsByClassName('big')[0];
+  home.removeChild(bigCard);
+  var cards = document.getElementsByClassName('card');
+  for(var i = 0; i < cards.length; i++){
+    cards[i].classList.value = 'card';
+  }
 }
 
 //Clears Home node children
