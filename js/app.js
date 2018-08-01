@@ -279,18 +279,30 @@ function renderBigFilm(card) {
   //Planet filter
   var planets = document.createElement('a');
   planets.textContent = 'Related planets'
+  //Placeholder href
+  planets.setAttribute('href', 'https://swapi.co/api/planets/');
+  planets.onclick = callerEvent;
   index.appendChild(planets);
   //Starships filter
   var starships = document.createElement('a');
   starships.textContent = 'Related starships'
+  //Placeholder href
+  starships.setAttribute('href', 'https://swapi.co/api/starships/');
+  starships.onclick = callerEvent;
   index.appendChild(starships);
   //Vehicles filter
   var vehicles = document.createElement('a');
   vehicles.textContent = 'Related vehicles'
+  //Placeholder href
+  vehicles.setAttribute('href', 'https://swapi.co/api/vehicles/');
+  vehicles.onclick = callerEvent;
   index.appendChild(vehicles);
   //Species filter
   var species = document.createElement('a');
   species.textContent = 'Related species'
+  //Placeholder href
+  species.setAttribute('href', 'https://swapi.co/api/species/');
+  species.onclick = callerEvent;
   index.appendChild(species);
 
   //Render
@@ -404,18 +416,30 @@ function renderBigPerson(card) {
   //Planet filter
   var planets = document.createElement('a');
   planets.textContent = 'Related planets'
+  //Placeholder href
+  planets.setAttribute('href', 'https://swapi.co/api/planets/');
+  planets.onclick = callerEvent;
   index.appendChild(planets);
   //Starships filter
   var starships = document.createElement('a');
   starships.textContent = 'Related starships'
+  //Placeholder href
+  starships.setAttribute('href', 'https://swapi.co/api/starships/');
+  starships.onclick = callerEvent;
   index.appendChild(starships);
   //Vehicles filter
   var vehicles = document.createElement('a');
   vehicles.textContent = 'Related vehicles'
+  //Placeholder href
+  vehicles.setAttribute('href', 'https://swapi.co/api/vehicles/');
+  vehicles.onclick = callerEvent;
   index.appendChild(vehicles);
   //Species filter
   var speciesF = document.createElement('a');
   species.textContent = 'Related species'
+  //Placeholder href
+  species.setAttribute('href', 'https://swapi.co/api/species/');
+  species.onclick = callerEvent;
   index.appendChild(speciesF);
 
   leftColumn.appendChild(name);
