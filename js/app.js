@@ -152,6 +152,13 @@ function renderFilms(data) {
 function renderBigFilm(card) {
   var bigCard = document.createElement('div');
   bigCard.setAttribute('class', 'big');
+
+  //Close button
+  var close = document.createElement('button');
+  close.textContent = 'X';
+  close.setAttribute('class', 'btn-close')
+  close.onclick = closeCard;
+
   //Left column
   var leftColumn = document.createElement('div');
   leftColumn.setAttribute('class', 'left');
@@ -171,11 +178,6 @@ function renderBigFilm(card) {
   var dateOfRelease = document.createElement('p');
   dateOfRelease.setAttribute('class', 'italic');
   dateOfRelease.textContent = card.dataset.releaseDate;
-  //Close button
-  var close = document.createElement('button');
-  close.textContent = 'X';
-  close.setAttribute('class', 'btn-close')
-  close.onclick = closeCard;
 
   //Right column
   var rightColumn = document.createElement('div');
@@ -207,6 +209,7 @@ function renderBigFilm(card) {
   var species = document.createElement('a');
   species.textContent = 'Related species'
   index.appendChild(species);
+
   //Render
   bigCard.appendChild(close);
 
@@ -236,6 +239,9 @@ function renderPeople(data) {
     //Creates each individual card
     var card = document.createElement('div');
     card.setAttribute('class', 'card');
+    var url = data.results[people].url.split('/');
+    var id = url[url.length - 2];
+    card.setAttribute('id', id);
     //Datasets
     card.dataset.name = data.results[people].name;
     card.dataset.height = data.results[people].height;
@@ -265,6 +271,82 @@ function renderPeople(data) {
   }
 }
 
+function renderBigPerson(card) {
+  var bigCard = document.createElement('div');
+  bigCard.setAttribute('class', 'big');
+
+  //Close button
+  var close = document.createElement('button');
+  close.textContent = 'X';
+  close.setAttribute('class', 'btn-close')
+  close.onclick = closeCard;
+
+  //Left column
+  var leftColumn = document.createElement('div');
+  leftColumn.setAttribute('class', 'left');
+  //content
+  //Name
+  var name = document.createElement('h3');
+  name.textContent = "Name: " + card.dataset.name;
+  //Species
+  var species = document.createElement('h4');
+  species.textContent = "Species: " + card.dataset.species;
+  //Height
+  var height = document.createElement('h4');
+  height.textContent = "Height: " + card.dataset.height;
+  //Eye color
+  var eyeColor = document.createElement('h4');
+  eyeColor.textContent = "Eye color: " + card.dataset.eyeColor;
+  //Hair color
+  var hairColor = document.createElement('h4');
+  hairColor.textContent = "Hair color: " + card.dataset.hairColor;
+  //Gender
+  var gender = document.createElement('h4');
+  gender.textContent = "Gender: " + card.dataset.gender;
+  //DOB
+  var dob = document.createElement('h4');
+  dob.textContent = "Birth year: " + card.dataset.dob;
+
+  //Sub index
+  var index = document.createElement('div');
+  index.setAttribute('class', 'menu');
+  //People filter
+  var films = document.createElement('a');
+  films.textContent = 'Related films'
+  index.appendChild(films);
+  //Planet filter
+  var planets = document.createElement('a');
+  planets.textContent = 'Related planets'
+  index.appendChild(planets);
+  //Starships filter
+  var starships = document.createElement('a');
+  starships.textContent = 'Related starships'
+  index.appendChild(starships);
+  //Vehicles filter
+  var vehicles = document.createElement('a');
+  vehicles.textContent = 'Related vehicles'
+  index.appendChild(vehicles);
+  //Species filter
+  var speciesF = document.createElement('a');
+  species.textContent = 'Related species'
+  index.appendChild(speciesF);
+
+  //Render
+  bigCard.appendChild(close);
+
+  leftColumn.appendChild(name);
+  leftColumn.appendChild(species);
+  leftColumn.appendChild(height);
+  leftColumn.appendChild(eyeColor);
+  leftColumn.appendChild(hairColor);
+  leftColumn.appendChild(gender);
+  leftColumn.appendChild(dob);
+
+  bigCard.appendChild(leftColumn);
+  bigCard.appendChild(index);
+  home.appendChild(bigCard);
+}
+
 //Placeholder renderer //
 function renderPlaceholder(origin) {
   var placeHolder = document.createElement('h2');
@@ -292,6 +374,9 @@ function renderSelected(card, id){
   if(card.hasAttribute('data-title')){
     //Render Big Film
     renderBigFilm(card);
+  }
+  else if(card.hasAttribute('data-name')) {
+    renderBigPerson(card);
   }
 }
 
