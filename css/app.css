@@ -5,7 +5,13 @@ body{
 
 h1 {
   font-family: "Roboto", sans-serif;
-  font-weight: 800;
+}
+
+h2 {
+  font-family: "Roboto", sans-serif;
+  color: #F9D120;
+  text-align: center;
+  margin: 0 auto;
 }
 
 .banner {
@@ -176,11 +182,19 @@ h1 {
   }
 
   .banner {
-    padding: 2em;
-    height: 33%;
-    min-width: 100vw;
-    max-width: 100%;
-    margin: 0 auto 0.5em auto;
+    padding: 1em;
+    height: 25%;
+    min-width: 75vw;
+    max-width: 75vw;
+    margin: 0;
+  }
+
+  .breadcrumb {
+    padding: 1em 0 0 0;
+    min-width: 75vw;
+    max-width: 75vw;
+    margin: 0;
+    display: flex;
   }
 
   .menu {
@@ -195,17 +209,17 @@ h1 {
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
-    width: 100vw;
+    width: 75vw;
     margin: 0 auto;
-    max-width: 100vw;
+    max-width: 75vw;
   }
 
   .home > .big {
     width: 100%;
     min-width: 100%;
-    height: 480px;
-    min-height: 480px;
-    padding: 1.5em 1em;
+    height: auto;
+    min-height: auto;
+    padding: 1em;
     margin-bottom: 1em;
     position: relative;
     display: flex;
@@ -222,7 +236,10 @@ h1 {
 
   .big > .menu {
     width: 100%;
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    text-align: left;
+  }
+  .menu > a {
+    margin-bottom: 0.3em;
   }
 }
