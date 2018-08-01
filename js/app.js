@@ -116,7 +116,7 @@ function renderFilms(data) {
     without requiring aditional API calls nor scope errors.
     Since none of the data is sensitive, all is forward-facing.
   */
-  for(var film in data.results){
+  for(var film in data.results) {
     //Creates each individual card
     var card = document.createElement('div');
     card.setAttribute('class', 'card');
@@ -147,6 +147,82 @@ function renderFilms(data) {
     card.onclick = infoEvent;
     home.appendChild(card);
   }
+}
+
+function renderBigFilm(card) {
+  var bigCard = document.createElement('div');
+  bigCard.setAttribute('class', 'big');
+  //Left column
+  var leftColumn = document.createElement('div');
+  leftColumn.setAttribute('class', 'left');
+  //Title content
+  var title = document.createElement('h3');
+  title.textContent = card.dataset.title;
+  //Film Id Content
+  var filmId = document.createElement('h4');
+  filmId.textContent = card.dataset.episode;
+  //Director
+  var director = document.createElement('h4');
+  director.textContent = card.dataset.director;
+  //Producer
+  var producer = document.createElement('h4');
+  producer.textContent = card.dataset.producer;
+  //Relase Date Info
+  var dateOfRelease = document.createElement('p');
+  dateOfRelease.setAttribute('class', 'italic');
+  dateOfRelease.textContent = card.dataset.releaseDate;
+  //Close button
+  var close = document.createElement('button');
+  close.textContent = 'X';
+  close.setAttribute('class', 'btn-close')
+  close.onclick = closeCard;
+
+  //Right column
+  var rightColumn = document.createElement('div');
+  rightColumn.setAttribute('class', 'right');
+  //Text crawl content
+  var crawl = document.createElement('p');
+  crawl.textContent = card.dataset.crawl;
+
+  //Sub index
+  var index = document.createElement('div');
+  index.setAttribute('class', 'menu');
+  //People filter
+  var people = document.createElement('a');
+  people.textContent = 'Related characters'
+  index.appendChild(people);
+  //Planet filter
+  var planets = document.createElement('a');
+  planets.textContent = 'Related planets'
+  index.appendChild(planets);
+  //Starships filter
+  var starships = document.createElement('a');
+  starships.textContent = 'Related starships'
+  index.appendChild(starships);
+  //Vehicles filter
+  var vehicles = document.createElement('a');
+  vehicles.textContent = 'Related vehicles'
+  index.appendChild(vehicles);
+  //Species filter
+  var species = document.createElement('a');
+  species.textContent = 'Related species'
+  index.appendChild(species);
+  //Render
+  bigCard.appendChild(close);
+
+  leftColumn.appendChild(title);
+  leftColumn.appendChild(filmId);
+  leftColumn.appendChild(director);
+  leftColumn.appendChild(producer);
+  leftColumn.appendChild(dateOfRelease);
+
+  rightColumn.appendChild(crawl);
+
+  bigCard.appendChild(leftColumn);
+  bigCard.appendChild(rightColumn);
+  bigCard.appendChild(index);
+
+  home.appendChild(bigCard);
 }
 
 function renderPeople(data) {
@@ -213,40 +289,10 @@ function infoEvent(){
 
 //Renders extra data within selected div
 function renderSelected(card, id){
-  var bigCard = document.createElement('div');
-  bigCard.setAttribute('class', 'big');
   if(card.hasAttribute('data-title')){
     //Render Big Film
-    //Title content
-    var title = document.createElement('h3');
-    title.textContent = card.dataset.title;
-    //Film Id Content
-    var filmId = document.createElement('h4');
-    filmId.textContent = card.dataset.episode;
-    //Director
-    var director = document.createElement('h4');
-    director.textContent = card.dataset.director;
-    //Producer
-    var producer = document.createElement('h4');
-    producer.textContent = card.dataset.producer;
-    //Relase Date Info
-    var dateOfRelease = document.createElement('p');
-    dateOfRelease.setAttribute('class', 'italic');
-    dateOfRelease.textContent = card.dataset.releaseDate;
-    //Close button
-    var close = document.createElement('button');
-    close.textContent = 'X';
-    close.setAttribute('class', 'btn-close')
-    close.onclick = closeCard;
-    //Render
-    bigCard.appendChild(title);
-    bigCard.appendChild(close);
-    bigCard.appendChild(filmId);
-    bigCard.appendChild(director);
-    bigCard.appendChild(producer);
-    bigCard.appendChild(dateOfRelease);
+    renderBigFilm(card);
   }
-  home.appendChild(bigCard);
 }
 
 //Clears big card

@@ -19,7 +19,8 @@ h1 {
 .banner > h1 {
   text-align: center;
 }
-.banner > .menu {
+
+.menu {
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -72,9 +73,12 @@ h1 {
   height: 360px;
   min-height: 360px;
   background-color: #DDDDDD;
-  padding: 0.5em 1em;
+  padding: 1.5em 1em;
   margin-bottom: 1em;
   position: relative;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 .big > button.btn-close {
@@ -91,6 +95,12 @@ h1 {
   color: blue;
 }
 
+.big > .left {
+  width: 33%;
+}
+.big > .right {
+  width: 66%;
+}
 .card > h3,
 .big > h3 {
   font-family: "Roboto", sans-serif;
