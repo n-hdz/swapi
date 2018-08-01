@@ -1,5 +1,7 @@
 //Creates home XMLHttp Request
 var request = new XMLHttpRequest();
+
+//App Front-End declaration
 const app = document.getElementById('root');
 const banner = document.createElement('div');
 banner.setAttribute('class', 'banner');
@@ -10,6 +12,25 @@ const message = document.createElement('h1');
 const home = document.createElement('div');
 home.setAttribute('class', 'home');
 home.setAttribute('id', 'canvas');
+
+//Pagination declaration
+var pagination = document.createElement('div');
+pagination.setAttribute('class', 'paginator');
+var prev = document.createElement('a');
+prev.setAttribute('class', 'pag-control');
+prev.setAttribute('id', 'prev');
+prev.textContent = '<<';
+prev.setAttribute('href', 'https://swapi.co/api/people/?page=1');
+prev.onclick = callerEvent;
+var next = document.createElement('a');
+next.setAttribute('class', 'pag-control');
+next.setAttribute('id', 'next');
+next.textContent = '>>';
+next.setAttribute('href', 'https://swapi.co/api/people/?page=2');
+next.onclick = callerEvent;
+pagination.appendChild(prev);
+pagination.appendChild(next);
+
 // Set Default Section
 const defaultSection = 'https://swapi.co/api/films/';
 var current = '';
@@ -108,6 +129,19 @@ function renderDefault(){
 
 //Handles Section API Calls
 function callerEvent(e){
+  if(this.href.includes('?')){
+    var current = parseInt(this.href[this.href.length - 1]);
+    var next = document.getElementById('next');
+    var previous = document.getElementById('prev');
+    console.log("current: " + current);
+    if (current > 1 && current <= 8) {
+      var prev = current - 1
+      previous.href = 'https://swapi.co/api/people/?page=' + prev;
+      var plus = current + 1
+      next.href = 'https://swapi.co/api/people/?page=' + plus;
+    }
+
+  }
   e.preventDefault();
   // Clears previous Home content
   clearHome();
@@ -198,7 +232,8 @@ function renderFilms(data, current) {
     card.onclick = infoEvent;
     home.appendChild(card);
   }
-
+    //Remove pagination
+    app.removeChild(pagination);
 }
 
 function renderBigFilm(card) {
@@ -323,6 +358,8 @@ function renderPeople(data) {
     card.onclick = infoEvent;
     home.appendChild(card);
   }
+  //Set pagination
+  app.appendChild(pagination);
 }
 
 function renderBigPerson(card) {
@@ -400,6 +437,8 @@ function renderPlaceholder(origin) {
   var placeHolder = document.createElement('h2');
   placeHolder.textContent = 'Very soon you will see the data of ' + origin;
   home.appendChild(placeHolder);
+  //Remove pagination
+  app.removeChild(pagination);
 }
 
 //Section Extra Info Switcher
@@ -428,6 +467,7 @@ function renderSelected(card, id){
   }
 }
 
+//Filtered Renders
 function renderFilterPersons(){
   event.preventDefault();
   var characters = this.parentNode.parentNode.dataset.characters.split(",");

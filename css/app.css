@@ -118,3 +118,13 @@ a:hover {
   font-family: "OpenSans", sans-serif;
   font-style: italic;
 }
+
+.paginator {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 95%;
+  margin: 0 auto;
+  max-width: 860px;
+}
