@@ -238,7 +238,7 @@ function renderBigFilm(card) {
   var people = document.createElement('a');
   people.textContent = 'Related characters'
   people.dataset.section = 'people';
-  people.onclick = renderFilter;
+  people.onclick = renderFilterPersons;
   index.appendChild(people);
   //Planet filter
   var planets = document.createElement('a');
@@ -287,6 +287,14 @@ function renderPeople(data) {
     var url = data.results[people].url.split('/');
     var id = url[url.length - 2];
     card.setAttribute('id', id);
+    //Filter data-binding
+    var relatedFilms = [];
+    for(var film in data.results[people].films){
+      var url = data.results[people].films[film].split('/');
+      var id = url[5];
+      relatedFilms.push(id);
+    }
+    card.dataset.films = relatedFilms;
     //Datasets
     card.dataset.name = data.results[people].name;
     card.dataset.height = data.results[people].height;
@@ -319,7 +327,7 @@ function renderPeople(data) {
 function renderBigPerson(card) {
   var bigCard = document.createElement('div');
   bigCard.setAttribute('class', 'big');
-
+  bigCard.dataset.films = card.dataset.films;
   //Left column
   var leftColumn = document.createElement('div');
   leftColumn.setAttribute('class', 'left');
@@ -352,6 +360,8 @@ function renderBigPerson(card) {
   //People filter
   var films = document.createElement('a');
   films.textContent = 'Related films'
+  films.dataset.section = 'films';
+  films.onclick = renderFilterFilms;
   index.appendChild(films);
   //Planet filter
   var planets = document.createElement('a');
@@ -417,22 +427,82 @@ function renderSelected(card, id){
   }
 }
 
-function renderFilter(){
+function renderFilterPersons(){
   event.preventDefault();
   var ids = [];
-  var characters =this.parentNode.parentNode.dataset.characters.split(",");
-  for(character in characters){
-    ids.push(parseInt(character));
+  var characters = this.parentNode.parentNode.dataset.characters.split(",");
+  for(var i = 0; i < characters.length; i++){
+    ids.push(parseInt(characters[i]));
   }
-  console.log(ids);
-  var bigCard = document.getElementsByClassName('big')[0];
-  home.removeChild(bigCard);
-  var cards = document.getElementsByClassName('card');
-  for(var i = 0; i < cards.length; i++){
-    //cards[i].classList.value = 'card';
-  }
+  var origin = this.dataset.section;
+  filterEvent(origin, ids)
 }
 
+function renderFilterFilms(){
+  event.preventDefault();
+  var ids = [];
+  var films = this.parentNode.parentNode.dataset.films.split(",");
+  for(var i = 0; i < films.length; i++){
+    ids.push(parseInt(films[i]));
+  }
+  var origin = this.dataset.section;
+  filterEvent(origin, ids)
+}
+
+//Handles Section API Calls
+function filterEvent(origin, params){
+  event.preventDefault();
+  // Clears previous Home content
+  clearHome();
+  // Clears breadcrumbs
+  var breadcrumb = document.getElementById('breadcrumb');
+  while(breadcrumb.childNodes.length > 1) {
+    breadcrumb.removeChild(breadcrumb.lastChild);
+  }
+  //Creates 'section' XMLHttp Request
+  var data = new XMLHttpRequest();
+  request.open('GET', 'https://swapi.co/api/' + origin + '/', true);
+  //Stores origin of JSON data to 'route' correct info to render
+  request.onload = function() {
+    //GET on SUCCESS
+    if(this.readyState == 4 && this.status == 200) {
+      //JSON response parse
+      var results = [];
+      var data = JSON.parse(this.response);
+      for(film in params){
+        for(var res in data.results){
+          var url = data.results[res].url.split('/');
+          var marker = url[url.length - 2];
+          if(marker == params[film]){
+            results.push(data.results[res]);
+          }
+        }
+      }
+      var filteredData = {
+        results: results
+      };
+      //'Filtered Router' to each section JSON response
+      switch (origin) {
+        case 'people':
+          renderPeople(filteredData);
+          changeBreadcrumb(origin);
+          break;
+        case 'films':
+          renderFilms(filteredData);
+          changeBreadcrumb(origin);
+          break;
+        default:
+          renderPlaceholder(origin);
+          changeBreadcrumb(origin);
+      }
+    //ON ERROR
+    } else if(request.status >= 400) {
+        console.log('El recurso no existe o no se encuentra disponible.');
+      }
+  }
+  //On menu click call
+  request.send();
+}
 //Clears Home node children
 function clearHome() {
   while(home.firstChild){
