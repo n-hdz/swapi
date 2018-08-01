@@ -12,7 +12,7 @@ home.setAttribute('class', 'home');
 home.setAttribute('id', 'canvas');
 // Set Default Section
 const defaultSection = 'https://swapi.co/api/films/';
-
+var current = '';
 //GET new connection
 request.open('GET', 'https://swapi.co/api/', true);
 banner.appendChild(message);
@@ -152,7 +152,7 @@ function callerEvent(e){
 }
 
 //// Section Renderer ////
-function renderFilms(data) {
+function renderFilms(data, current) {
   /*
     Renders content for 'Films' Section;
     Data is stored in data-sets to enable use across functions
@@ -198,6 +198,7 @@ function renderFilms(data) {
     card.onclick = infoEvent;
     home.appendChild(card);
   }
+
 }
 
 function renderBigFilm(card) {
@@ -429,24 +430,16 @@ function renderSelected(card, id){
 
 function renderFilterPersons(){
   event.preventDefault();
-  var ids = [];
   var characters = this.parentNode.parentNode.dataset.characters.split(",");
-  for(var i = 0; i < characters.length; i++){
-    ids.push(parseInt(characters[i]));
-  }
   var origin = this.dataset.section;
-  filterEvent(origin, ids)
+  filterEvent(origin, characters)
 }
 
 function renderFilterFilms(){
   event.preventDefault();
-  var ids = [];
   var films = this.parentNode.parentNode.dataset.films.split(",");
-  for(var i = 0; i < films.length; i++){
-    ids.push(parseInt(films[i]));
-  }
   var origin = this.dataset.section;
-  filterEvent(origin, ids)
+  filterEvent(origin, films)
 }
 
 //Handles Section API Calls
@@ -469,25 +462,37 @@ function filterEvent(origin, params){
       //JSON response parse
       var results = [];
       var data = JSON.parse(this.response);
-      for(film in params){
-        for(var res in data.results){
-          var url = data.results[res].url.split('/');
-          var marker = url[url.length - 2];
-          if(marker == params[film]){
-            results.push(data.results[res]);
-          }
-        }
-      }
-      var filteredData = {
-        results: results
-      };
       //'Filtered Router' to each section JSON response
       switch (origin) {
         case 'people':
+          for(character in params){
+            for(var res in data.results){
+              var url = data.results[res].url.split('/');
+              var marker = url[url.length - 2];
+              if(marker == params[character]){
+                results.push(data.results[res]);
+              }
+            }
+          }
+          var filteredData = {
+            results: results
+          };
           renderPeople(filteredData);
           changeBreadcrumb(origin);
           break;
         case 'films':
+          for(film in params){
+            for(var res in data.results){
+              var url = data.results[res].url.split('/');
+              var marker = url[url.length - 2];
+              if(marker == params[film]){
+                results.push(data.results[res]);
+              }
+            }
+          }
+          var filteredData = {
+            results: results
+          };
           renderFilms(filteredData);
           changeBreadcrumb(origin);
           break;
