@@ -13,7 +13,20 @@ h1 {
   min-width: 450px;
   max-width: 860px;
   background-color: #DDDDDD;
-  margin: 0 auto 2em auto;
+  margin: 0 auto 0.5em auto;
+}
+
+.breadcrumb {
+  padding: 1em;
+  min-width: 450px;
+  max-width: 860px;
+  margin: 0 auto 0.5em auto;
+  display: flex;
+}
+
+.breadcrumb > p {
+  margin: 0px 0.5em 0px 0.5em;
+  font-family: "Roboto", sans-serif;
 }
 
 .banner > h1 {
@@ -26,13 +39,13 @@ h1 {
   justify-content: space-between;
 }
 
-.menu > a {
+a {
   text-decoration: none;
   color: #000000;
   font-family: "OpenSans", sans-serif;
 }
 
-.menu > a:hover {
+a:hover {
   text-decoration: underline;
   color: yellow;
 }
@@ -48,10 +61,10 @@ h1 {
 }
 
 .home > .card {
-  width: 200px;
-  min-width: 200px;
-  height: 200px;
-  min-height: 200px;
+  width: 150px;
+  min-width: 150px;
+  height: 150px;
+  min-height: 150px;
   background-color: #DDDDDD;
   padding: 0.5em 1em;
   margin-bottom: 1em;
@@ -79,20 +92,6 @@ h1 {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-}
-
-.big > button.btn-close {
-  position: absolute;
-  top: 1em;
-  right: 1em;
-  background: transparent;
-  border: none;
-  color: yellow;
-}
-
-.big > button.btn-close:hover {
-  cursor: pointer;
-  color: blue;
 }
 
 .big > .left {

@@ -3,6 +3,9 @@ var request = new XMLHttpRequest();
 const app = document.getElementById('root');
 const banner = document.createElement('div');
 banner.setAttribute('class', 'banner');
+const breadcrumb = document.createElement('div');
+breadcrumb.setAttribute('id', 'breadcrumb');
+breadcrumb.setAttribute('class', 'breadcrumb');
 const message = document.createElement('h1');
 const home = document.createElement('div');
 home.setAttribute('class', 'home');
@@ -22,6 +25,8 @@ request.onload = function() {
     var data = JSON.parse(this.response);
     // OK status banner render
     message.textContent = "Star Wars Data";
+    //Breadcrumb setter
+    setBreadcrumb();
     //JSON data handling
 
     // Main navigation Menu Render
@@ -48,6 +53,36 @@ request.onload = function() {
  //// On Home load ////
 request.send();
 app.appendChild(banner);
+app.appendChild(breadcrumb);
+
+//Breadcrumb control
+function setBreadcrumb() {
+  var mainCrumb = document.createElement('a');
+  mainCrumb.setAttribute('id', 'mainCrumb');
+  mainCrumb.setAttribute('class', 'crumb');
+  mainCrumb.onclick = callerEvent;
+  var url = defaultSection.split('/');
+  var section = url[url.length - 2];
+  mainCrumb.textContent = section;
+  mainCrumb.setAttribute('href', 'https://swapi.co/api/' + section + '/');
+  breadcrumb.appendChild(mainCrumb);
+}
+
+function changeBreadcrumb(origin) {
+  var mainCrumb = document.getElementById("mainCrumb");
+  mainCrumb.textContent = origin;
+  mainCrumb.setAttribute('href', 'https://swapi.co/api/' + origin + '/');
+}
+
+function appendBreadCrumb(content) {
+  var sectionCrumb = document.createElement('a');
+  sectionCrumb.setAttribute('class', 'crumb');
+  sectionCrumb.textContent = content;
+  var separator = document.createElement('p');
+  separator.textContent = '>';
+  breadcrumb.appendChild(separator);
+  breadcrumb.appendChild(sectionCrumb);
+}
 
 //Renders onLoad first Section; Can be configured to any section
 function renderDefault(){
@@ -76,6 +111,11 @@ function callerEvent(e){
   e.preventDefault();
   // Clears previous Home content
   clearHome();
+  // Clears breadcrumbs
+  var breadcrumb = document.getElementById('breadcrumb');
+  while(breadcrumb.childNodes.length > 1) {
+    breadcrumb.removeChild(breadcrumb.lastChild);
+  }
   //Creates 'section' XMLHttp Request
   var data = new XMLHttpRequest();
   request.open('GET', this.href, true);
@@ -92,12 +132,15 @@ function callerEvent(e){
       switch (origin) {
         case 'people':
           renderPeople(data);
+          changeBreadcrumb(origin);
           break;
         case 'films':
           renderFilms(data);
+          changeBreadcrumb(origin);
           break;
         default:
           renderPlaceholder(origin);
+          changeBreadcrumb(origin);
       }
     //ON ERROR
     } else if(request.status >= 400) {
@@ -121,6 +164,14 @@ function renderFilms(data) {
     var card = document.createElement('div');
     card.setAttribute('class', 'card');
     card.setAttribute('id', data.results[film].episode_id);
+    //Filter data-binding
+    var relatedChars = [];
+    for(var character in data.results[film].characters){
+      var url = data.results[film].characters[character].split('/');
+      var id = url[5];
+      relatedChars.push(id);
+    }
+    card.dataset.characters = relatedChars;
     //Datasets
     card.dataset.title = data.results[film].title;
     card.dataset.episode = data.results[film].episode_id;
@@ -152,13 +203,7 @@ function renderFilms(data) {
 function renderBigFilm(card) {
   var bigCard = document.createElement('div');
   bigCard.setAttribute('class', 'big');
-
-  //Close button
-  var close = document.createElement('button');
-  close.textContent = 'X';
-  close.setAttribute('class', 'btn-close')
-  close.onclick = closeCard;
-
+  bigCard.dataset.characters = card.dataset.characters;
   //Left column
   var leftColumn = document.createElement('div');
   leftColumn.setAttribute('class', 'left');
@@ -192,6 +237,8 @@ function renderBigFilm(card) {
   //People filter
   var people = document.createElement('a');
   people.textContent = 'Related characters'
+  people.dataset.section = 'people';
+  people.onclick = renderFilter;
   index.appendChild(people);
   //Planet filter
   var planets = document.createElement('a');
@@ -211,8 +258,6 @@ function renderBigFilm(card) {
   index.appendChild(species);
 
   //Render
-  bigCard.appendChild(close);
-
   leftColumn.appendChild(title);
   leftColumn.appendChild(filmId);
   leftColumn.appendChild(director);
@@ -224,7 +269,7 @@ function renderBigFilm(card) {
   bigCard.appendChild(leftColumn);
   bigCard.appendChild(rightColumn);
   bigCard.appendChild(index);
-
+  appendBreadCrumb(card.dataset.title);
   home.appendChild(bigCard);
 }
 
@@ -274,12 +319,6 @@ function renderPeople(data) {
 function renderBigPerson(card) {
   var bigCard = document.createElement('div');
   bigCard.setAttribute('class', 'big');
-
-  //Close button
-  var close = document.createElement('button');
-  close.textContent = 'X';
-  close.setAttribute('class', 'btn-close')
-  close.onclick = closeCard;
 
   //Left column
   var leftColumn = document.createElement('div');
@@ -331,9 +370,6 @@ function renderBigPerson(card) {
   species.textContent = 'Related species'
   index.appendChild(speciesF);
 
-  //Render
-  bigCard.appendChild(close);
-
   leftColumn.appendChild(name);
   leftColumn.appendChild(species);
   leftColumn.appendChild(height);
@@ -344,6 +380,7 @@ function renderBigPerson(card) {
 
   bigCard.appendChild(leftColumn);
   bigCard.appendChild(index);
+  appendBreadCrumb(card.dataset.name);
   home.appendChild(bigCard);
 }
 
@@ -380,13 +417,19 @@ function renderSelected(card, id){
   }
 }
 
-//Clears big card
-function closeCard() {
+function renderFilter(){
+  event.preventDefault();
+  var ids = [];
+  var characters =this.parentNode.parentNode.dataset.characters.split(",");
+  for(character in characters){
+    ids.push(parseInt(character));
+  }
+  console.log(ids);
   var bigCard = document.getElementsByClassName('big')[0];
   home.removeChild(bigCard);
   var cards = document.getElementsByClassName('card');
   for(var i = 0; i < cards.length; i++){
-    cards[i].classList.value = 'card';
+    //cards[i].classList.value = 'card';
   }
 }
 
