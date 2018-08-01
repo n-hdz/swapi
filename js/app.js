@@ -133,7 +133,6 @@ function callerEvent(e){
     var current = parseInt(this.href[this.href.length - 1]);
     var next = document.getElementById('next');
     var previous = document.getElementById('prev');
-    console.log("current: " + current);
     if (current > 1 && current <= 8) {
       var prev = current - 1
       previous.href = 'https://swapi.co/api/people/?page=' + prev;
@@ -350,15 +349,49 @@ function renderPeople(data) {
     card.dataset.hairColor = data.results[people].hair_color;
     card.dataset.gender = data.results[people].gender;
     card.dataset.dob = data.results[people].birth_year;
-
     //Species JSON Workaround
     var species = data.results[people].species[0].split('/');
     var speciesCode = species[species.length - 2];
-    if(speciesCode == 1){
-      card.dataset.species = 'Human';
-    } else if(speciesCode == 2){
-      card.dataset.species = 'Droid';
-    }
+    var speciesCatalogue = {
+      1:'Human',
+      2:'Droid',
+      3:'Wookie',
+      4:'Rodian',
+      5:'Hutt',
+      6:'Yoda\'s species',
+      7:'Trandoshan',
+      8:'Mon Calamari',
+      9:'Ewok',
+      10:'Sullustan',
+      11:'Neimodian',
+      12:'Gungan',
+      13:'Toydarian',
+      14:'Dug',
+      15:'Twi\'Lek',
+      16:'Aleena',
+      17:'Vulptereen',
+      18:'Xexto',
+      19:'Toong',
+      20:'Cerean',
+      21:'Nautolan',
+      22:'Zabrak',
+      23:'Tholotian',
+      24:'Iktotchi',
+      25:'Quermian',
+      26:'Kel Dor',
+      27:'Chagrian',
+      28:'Geonosian',
+      29:'Mirialan',
+      30:'Clawdite',
+      31:'Besalisk',
+      32:'Kaminoan',
+      33:'Skakoan',
+      34:'Muun',
+      35:'Togruta',
+      36:'Kaleesh',
+      37:'Pau\'an'
+    };
+    card.dataset.species = speciesCatalogue[speciesCode];
 
     //OnLoad Content set
     //Name content
@@ -436,7 +469,7 @@ function renderBigPerson(card) {
   index.appendChild(vehicles);
   //Species filter
   var speciesF = document.createElement('a');
-  species.textContent = 'Related species'
+  speciesF.textContent = 'Related species'
   //Placeholder href
   species.setAttribute('href', 'https://swapi.co/api/species/');
   species.onclick = callerEvent;
